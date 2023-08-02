@@ -5,7 +5,8 @@ import * as cwlogs from "aws-cdk-lib/aws-logs"
 import { Construct } from "constructs"
 
 interface EcommerceApiStackProps extends cdk.StackProps {
-    productsFetchHandler: lambddaNodeJS.NodejsFunction,
+    productsFetchHandler: lambddaNodeJS.NodejsFunction
+    productsAdminHandler: lambddaNodeJS.NodejsFunction
     healthcheckHandler: lambddaNodeJS.NodejsFunction
 }
 
@@ -34,13 +35,22 @@ export class EcommerceApiStack extends cdk.Stack {
         })
         const productsFetchIntegration = new apigateway.LambdaIntegration(props.productsFetchHandler)
         const healthcheckFetchIntegration = new apigateway.LambdaIntegration(props.healthcheckHandler)
+        const productsAdminIntegration = new apigateway.LambdaIntegration(props.productsAdminHandler)
 
-        // "/PRODUCTS"
+        // "GET /PRODUCTS"
         const productsResource = api.root.addResource("products")
         productsResource.addMethod("GET", productsFetchIntegration)
-
-        // "/HELTHCHECK"
+        // "GET /PRODUCTS/{id}"
+        const productsIdResource = productsResource.addResource("{id}")
+        productsIdResource.addMethod("GET", productsFetchIntegration)
+        // "GET /HELTHCHECK"
         const healthcheck = api.root.addResource("healthcheck")
         healthcheck.addMethod("GET", healthcheckFetchIntegration)
+        // POST / PRODUCTS
+        productsResource.addMethod("POST", productsAdminIntegration)
+        // PUT / PRODUCTS/{id}
+        productsIdResource.addMethod("PUT", productsAdminIntegration)
+        // DELETE / PRODUCTS/{id}
+        productsIdResource.addMethod("DELETE", productsAdminIntegration)
     }
 }
