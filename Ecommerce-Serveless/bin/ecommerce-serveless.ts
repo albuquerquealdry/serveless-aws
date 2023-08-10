@@ -5,12 +5,13 @@ import { ProductsAppStack } from '../lib/productsApp-stack';
 import { EcommerceApiStack } from '../lib/ecommerceApi';
 import { HealthcheckStack } from '../lib/healthcheck-stack';
 import { ProductsAppLayersStack } from '../lib/productsAppLayers';
+import { EventsDdbStack } from '../lib/eventsDdb-stack'
 
 const app = new cdk.App();
 
 const env: cdk.Environment = {
-  account: "{{ account }}",
-  region: "{{ region }}"
+  account: "523616670904",
+  region: "us-east-1"
 }
 
 const tags = {
@@ -23,10 +24,16 @@ const productsAppLayersStack = new ProductsAppLayersStack(app,"ProductsAppLayers
   env: env
 })
 
-const productsAppStack = new ProductsAppStack(app, "ProductsApp",{
-  tags: tags, env:env
+const eventsDdbStack = new EventsDdbStack(app, "EventsDdb", {
+  tags: tags,
+  env: env
 })
 
+const productsAppStack = new ProductsAppStack(app, "ProductsApp", {
+  eventsDdb: eventsDdbStack.table,
+  tags: tags,
+  env: env
+})
 const healthcheckStack = new HealthcheckStack(app, "healthcheck")
 const ecommerceApiStack =  new EcommerceApiStack(app, "EcommerceApiStack", {
   productsFetchHandler: productsAppStack.productsFetchHandler,
