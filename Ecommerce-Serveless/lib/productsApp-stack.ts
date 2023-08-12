@@ -1,10 +1,5 @@
-//https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda-readme.html
 import * as lambda from "aws-cdk-lib/aws-lambda"
-
-//https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html
 import * as lambdaNodeJS from "aws-cdk-lib/aws-lambda-nodejs"
-
-//https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
 import * as cdk from "aws-cdk-lib"
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb"
 import * as ssm from "aws-cdk-lib/aws-ssm"

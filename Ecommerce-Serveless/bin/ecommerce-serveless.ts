@@ -34,6 +34,10 @@ const productsAppStack = new ProductsAppStack(app, "ProductsApp", {
   tags: tags,
   env: env
 })
+
+productsAppStack.addDependency(productsAppLayersStack)
+productsAppStack.addDependency(eventsDdbStack)
+
 const healthcheckStack = new HealthcheckStack(app, "healthcheck")
 const ecommerceApiStack =  new EcommerceApiStack(app, "EcommerceApiStack", {
   productsFetchHandler: productsAppStack.productsFetchHandler,
