@@ -10,7 +10,7 @@ import { EventsDdbStack } from '../lib/eventsDdb-stack'
 const app = new cdk.App();
 
 const env: cdk.Environment = {
-  account: "523616670904",
+  account: "",
   region: "us-east-1"
 }
 
@@ -34,6 +34,10 @@ const productsAppStack = new ProductsAppStack(app, "ProductsApp", {
   tags: tags,
   env: env
 })
+
+productsAppStack.addDependency(productsAppLayersStack)
+productsAppStack.addDependency(eventsDdbStack)
+
 const healthcheckStack = new HealthcheckStack(app, "healthcheck")
 const ecommerceApiStack =  new EcommerceApiStack(app, "EcommerceApiStack", {
   productsFetchHandler: productsAppStack.productsFetchHandler,
